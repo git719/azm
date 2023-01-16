@@ -12,22 +12,35 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.1.0"
+	prgver  = "0.1.5"  // Aim for v0.3.0 Working ver
 )
 
 func PrintUsage() {
-	fmt.Printf(prgname + " Azure Resource RBAC role definitions and assignments manager v" + prgver + "\n" +
-		"    UUID                              List definition or assignment object given its UUID\n" +
-		"    -vs Specfile                      Compare YAML or JSON specfile to what's in Azure\n" +
-		"    -rm UUID|Specfile|\"role name\"     Delete definition or assignment based on specifier\n" +
+	X := utl.ColRed("X")
+	fmt.Printf(prgname + " Azure Resource RBAC and MS Graph MANAGER v" + prgver + "\n" +
+		"    MANAGER FUNCTIONS\n" +
+		"    -rm UUID|Specfile|\"role name\"     Delete role definition or assignment based on specifier\n" +
 		"    -up Specfile                      Create or update definition or assignment based on specfile (YAML or JSON)\n" +
 		"    -kd[j]                            Create a skeleton role-definition.yaml specfile (JSON option)\n" +
 		"    -ka[j]                            Create a skeleton role-assignment.yaml specfile (JSON option)\n" +
-		"    -d[j] [Specifier]                 List all role definitions, with Specifier filter and JSON options\n" +
-		"    -a[j] [Specifier]                 List all role assignments, with Specifier filter and JSON options\n" +
-		"    -s[j] [Specifier]                 List all subscriptions, with Specifier filter and JSON options\n" +
 		"\n" +
-		"    -z                                Dump variables in running program\n" +
+		"    READER FUNCTIONS\n" +
+		"    UUID                              Show object for given UUID\n" +
+		"    -vs Specfile                      Compare YAML or JSON specfile to what's in Azure (only for d and a objects)\n" +
+		"    -"+X+"[j] [Specifier]                 List all "+X+" objects tersely, with option for JSON output and/or match on Specifier\n" +
+		"    -"+X+"x                               Delete "+X+" object local file cache\n\n" +
+		"      Where '"+X+"' can be any of these object types:\n" +
+		"      d  = RBAC Role Definitions   a  = RBAC Role Assignments   s  = Azure Subscriptions  \n" +
+		"      m  = Management Groups       u  = Azure AD Users          g  = Azure AD Groups      \n" +
+		"      sp = Service Principals      ap = Applications            ad = Azure AD Roles\n" +
+		"\n" +
+		"    -xx                               Delete ALL cache local files\n" +
+		"    -ar                               List all RBAC role assignments with resolved names\n" +
+		"    -mt                               List Management Group and subscriptions tree\n" +
+		"    -pags                             List all Azure AD Privileged Access Groups\n" +
+		"    -st                               List local cache count and Azure count of all objects\n" +
+		"\n" +
+		"    -z                                Dump important program variables\n" +
 		"    -cr                               Dump values in credentials file\n" +
 		"    -cr  TenantId ClientId Secret     Set up MSAL automated ClientId + Secret login\n" +
 		"    -cri TenantId Username            Set up MSAL interactive browser popup login\n" +
@@ -54,7 +67,7 @@ func SetupVariables(z *maz.Bundle) maz.Bundle {
 		AzHeaders:    map[string]string{},
 	}
 	// Set up configuration directory
-	z.ConfDir = filepath.Join(os.Getenv("HOME"), "."+prgname)
+	z.ConfDir = filepath.Join(os.Getenv("HOME"), ".maz") // IMPORTANT: Setting config dir = "~/.maz"
 	if utl.FileNotExist(z.ConfDir) {
 		if err := os.Mkdir(z.ConfDir, 0700); err != nil {
 			panic(err.Error())
@@ -88,7 +101,7 @@ func main() {
 		case "-xx":
 			maz.RemoveCacheFile("all", z)
 		case "-tx", "-dx", "-ax", "-sx", "-mx", "-ux", "-gx", "-spx", "-apx", "-adx":
-			t := arg1[1 : len(arg1)-1] // Single out the object type
+			t := arg1[1 : len(arg1)-1] // Single out the object type (t, d, sp, etc)
 			maz.RemoveCacheFile(t, z)
 		case "-dj", "-aj", "-sj", "-mj", "-uj", "-gj", "-spj", "-apj", "-adj":
 			t := arg1[1 : len(arg1)-1]
@@ -100,18 +113,24 @@ func main() {
 			for _, i := range all { // Print entire set tersely
 				maz.PrintTersely(t, i)
 			}
-		case "-ar":
-			maz.PrintRoleAssignmentReport(z)
 		case "-mt":
 			maz.PrintMgTree(z)
 		case "-pags":
 			maz.PrintPags(z)
 		case "-st":
 			maz.PrintCountStatus(z)
+		case "-kd", "-kdj", "-ka", "-kaj":
+			t := arg1[1 : len(arg1)-1] // Single out the type (d, dj, a, aj)
+			fmt.Println("TODO: Write maz.CreateSkeletonFile(t) " + t)
+			//maz.CreateSkeletonFile(t)
 		case "-z":
 			maz.DumpVariables(z)
 		default:
-			PrintUsage()
+			if utl.ValidUuid(arg1) { // If valid UUID, search/print matching object(s?)
+				maz.PrintObjectById(arg1, z)
+			} else {
+				PrintUsage()
+			}
 		}
 	case 2: // Process 2-argument requests
 		arg1 := os.Args[1]
@@ -150,6 +169,12 @@ func main() {
 					}
 				}
 			}
+        case "-rm":
+			fmt.Println("TODO: Write maz.DeleteAzObject(arg2)")
+			//maz.DeleteAzObject(arg2)
+		case "-up":
+			fmt.Println("TODO: Write maz.UpsertAzObject(arg2)")
+			//maz.UpsertAzObject(arg2) // Create or Update object (role definition or assignment only)
 		default:
 			PrintUsage()
 		}
@@ -182,86 +207,3 @@ func main() {
 	}
 	os.Exit(0)
 }
-
-// if ( $args.Count -eq 1 ) {        # Process 1-argument requests
-//     $arg1 = $args[0]
-//     # These 1-arg requests don't need credentials and API tokens to be setup
-//     if ( $arg1 -eq "-cr" ) {
-//         DumpCredentials
-//     } elseif ( $arg1 -eq "-tx" ) {
-//         ClearTokenCache
-//         exit
-//     } elseif ( ($arg1 -eq "-kd") -or ($arg1 -eq "-kdj") -or ($arg1 -eq "-ka") -or ($arg1 -eq "-kaj") ) {
-//         CreateSkeletonFile $arg1
-//     } elseif ( $arg1 -eq "-v" ) {
-//         PrintUsage
-//     }
-//     # The rest do need global credentials and API tokens available
-//     SetupApiTokens
-//     if ( ValidUuid $arg1 ) {
-//         ShowObject $arg1
-//     } elseif ( ($arg1 -eq "-dj") -or ($arg1 -eq "-aj") -or ($arg1 -eq "-sj") ) {
-//         $t = $arg1.Substring(1,1)    # Get object type designator
-//         $allObjects = GetAllAzObjects $t
-//         PrintJson ($allObjects)
-//         exit
-//     } elseif ( ($arg1 -eq "-d") -or ($arg1 -eq "-a") -or ($arg1 -eq "-s") ) {
-//         $t = $arg1.Substring(1,1)    # Get object type designator
-//         PrintAllAzObjectsTersely $t
-//         exit
-//     } elseif ( $arg1 -eq "-z" ) {
-//         DumpVariables
-//     } else {
-//         PrintUsage
-//     }
-// } elseif ( $args.Count -eq 2 ) {  # Process 2-argument requests
-//     $arg1 = $args[0] ; $arg2 = $args[1]
-//     SetupApiTokens
-//     if ( $arg1 -eq "-vs" ) {
-//         CompareSpecfile $arg2
-//     } elseif ( $arg1 -eq "-rm" ) {
-//         DeleteObject $arg2
-//     } elseif ( $arg1 -eq "-up" ) {
-//         UpsertAzObject $arg2  # Create or Update role definition or assignment
-//     } elseif ( ($arg1 -eq "-dj") -or ($arg1 -eq "-aj") -or ($arg1 -eq "-sj") ) {
-//         # Process request with JSON formatted output option
-//         $t = $arg1.Substring(1,1)    # Get object type designator
-//         $objects = GetMatching $t $arg2   # Get all matching objects
-//         if ( $objects.Count -gt 1 ) {
-//             PrintJson $objects
-//         } elseif ( $objects.Count -gt 0 ) {
-//             PrintJson $objects[0]
-//         }
-//         exit
-//     } elseif ( ($arg1 -eq "-d") -or ($arg1 -eq "-a") -or ($arg1 -eq "-s") ) {
-//         # Process request with reguarly, tersely formatted output option
-//         $t = $arg1.Substring(1,1)    # Get object type designator
-//         $objects = GetMatching $t $arg2
-//         if ( $objects.Count -gt 1 ) {
-//             foreach ($i in $objects) {
-//                 PrintAzObjectTersely $t $i
-//             }
-//         } elseif ( $objects.Count -gt 0 ) {
-//             PrintAzObject $t $objects[0]
-//         }
-//         exit
-//     } else {
-//         PrintUsage
-//     }
-// } elseif ( $args.Count -eq 3 ) {  # Process 3-argument requests
-//     $arg1 = $args[0] ; $arg2 = $args[1] ; $arg3 = $args[2]
-//     if ( $arg1 -eq "-cri" ) {
-//         SetupInteractiveLogin $arg2 $arg3
-//     } else {
-//         PrintUsage
-//     }
-// } elseif ( $args.Count -eq 4 ) {  # Process 4-argument requests
-//     $arg1 = $args[0] ; $arg2 = $args[1] ; $arg3 = $args[2] ; $arg4 = $args[3]
-//     if ( $arg1 -eq "-cr" ) {
-//         SetupAutomatedLogin $arg2 $arg3 $arg4
-//     } else {
-//         PrintUsage
-//     }
-// } else {
-//     PrintUsage
-// }
