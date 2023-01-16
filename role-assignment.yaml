@@ -1,0 +1,4 @@
+properties:
+  roleDefinitionId: 2489dfa4-3333-4444-9999-b04b7a1e4ea6  # Comment to mention the actual roleName = "My Special Role"
+  principalId:      65c6427a-1111-5555-7777-274d26531314  # Comment to mention the actual Group displayName = "My Special Group"
+  scope:            /providers/Microsoft.Management/managementGroups/3f550b9f-8888-7777-ad61-111199992222

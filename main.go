@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.1.5"  // Aim for v0.3.0 Working ver
+	prgver  = "0.1.6"  // Aim for v0.3.0 Working ver
 )
 
 func PrintUsage() {
@@ -120,13 +120,13 @@ func main() {
 		case "-st":
 			maz.PrintCountStatus(z)
 		case "-kd", "-kdj", "-ka", "-kaj":
-			t := arg1[1 : len(arg1)-1] // Single out the type (d, dj, a, aj)
-			fmt.Println("TODO: Write maz.CreateSkeletonFile(t) " + t)
-			//maz.CreateSkeletonFile(t)
+			t := arg1[2:] // Single out the type (d, dj, a, aj)
+			maz.CreateSkeletonFile(t)
 		case "-z":
 			maz.DumpVariables(z)
 		default:
-			if utl.ValidUuid(arg1) { // If valid UUID, search/print matching object(s?)
+			c := rune(arg1[0]) // Grab 1st charater of string, to check if it's hex
+			if utl.IsHexDigit(c) && utl.ValidUuid(arg1) { // If valid UUID, search/print matching object(s?)
 				maz.PrintObjectById(arg1, z)
 			} else {
 				PrintUsage()

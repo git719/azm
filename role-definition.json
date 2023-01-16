@@ -1,0 +1,26 @@
+{
+"properties": {
+    "roleName": "My RBAC Role",
+    "description": "Description of what this role does.",
+    "type": "CustomRole",
+    "assignableScopes": [
+      "/providers/Microsoft.Management/managementGroups/3f550b9f-8888-7777-ad61-111199992222"
+    ],
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.DevCenter/projects/*/read"
+        ],
+        "notActions": [
+          "Microsoft.DevCenter/projects/pools/read"
+        ],
+        "dataActions": [
+          "Microsoft.KeyVault/vaults/secrets/*"
+        ],
+        "notDataActions": [
+          "Microsoft.CognitiveServices/accounts/LUIS/apps/delete"
+        ]
+      }
+    ]
+  }
+}
