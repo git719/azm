@@ -1,5 +1,5 @@
 {
-"properties": {
+  "properties": {
     "roleName": "My RBAC Role",
     "description": "Description of what this role does.",
     "type": "CustomRole",
