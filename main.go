@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.1.6"  // Aim for v0.3.0 Working ver
+	prgver  = "0.2.1"  // Aim for v0.3.0 Working ver
 )
 
 func PrintUsage() {
@@ -127,7 +127,7 @@ func main() {
 		default:
 			c := rune(arg1[0]) // Grab 1st charater of string, to check if it's hex
 			if utl.IsHexDigit(c) && utl.ValidUuid(arg1) { // If valid UUID, search/print matching object(s?)
-				maz.PrintObjectById(arg1, z)
+				maz.PrintObjectByUuid(arg1, z)
 			} else {
 				PrintUsage()
 			}
@@ -142,7 +142,7 @@ func main() {
 		case "-dj", "-aj", "-sj", "-mj", "-uj", "-gj", "-spj", "-apj", "-adj":
 			t := arg1[1 : len(arg1)-1] // Single out the object type
 			if utl.ValidUuid(arg2) {   // Search/print single object, if it's valid UUID
-				x := maz.GetObjectById(t, arg2, z)
+				x := maz.GetAzObjectByUuid(t, arg2, z)
 				utl.PrintJson(x)
 			} else {
 				matchingObjects := maz.GetObjects(t, arg2, false, z)
@@ -155,7 +155,7 @@ func main() {
 		case "-d", "-a", "-s", "-m", "-u", "-g", "-sp", "-ap", "-ad":
 			t := arg1[1:]            // Single out the object type
 			if utl.ValidUuid(arg2) { // Search/print single object, if it's valid UUID
-				x := maz.GetObjectById(t, arg2, z)
+				x := maz.GetAzObjectByUuid(t, arg2, z)
 				maz.PrintObject(t, x, z)
 			} else {
 				matchingObjects := maz.GetObjects(t, arg2, false, z)
@@ -170,11 +170,9 @@ func main() {
 				}
 			}
         case "-rm":
-			fmt.Println("TODO: Write maz.DeleteAzObject(arg2)")
-			//maz.DeleteAzObject(arg2)
+			maz.DeleteAzObject(arg2, z)
 		case "-up":
-			fmt.Println("TODO: Write maz.UpsertAzObject(arg2)")
-			//maz.UpsertAzObject(arg2) // Create or Update object (role definition or assignment only)
+			maz.UpsertAzObject(arg2, z)
 		default:
 			PrintUsage()
 		}
