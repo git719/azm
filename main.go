@@ -12,11 +12,11 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.2.1"  // Aim for v0.3.0 Working ver
+	prgver  = "0.2.2" // Aim for v0.3.0 Working ver
 )
 
 func PrintUsage() {
-	X := utl.ColRed("X")
+	X := utl.Red("X")
 	fmt.Printf(prgname + " Azure Resource RBAC and MS Graph MANAGER v" + prgver + "\n" +
 		"    MANAGER FUNCTIONS\n" +
 		"    -rm UUID|Specfile|\"role name\"     Delete role definition or assignment based on specifier\n" +
@@ -27,9 +27,9 @@ func PrintUsage() {
 		"    READER FUNCTIONS\n" +
 		"    UUID                              Show object for given UUID\n" +
 		"    -vs Specfile                      Compare YAML or JSON specfile to what's in Azure (only for d and a objects)\n" +
-		"    -"+X+"[j] [Specifier]                 List all "+X+" objects tersely, with option for JSON output and/or match on Specifier\n" +
-		"    -"+X+"x                               Delete "+X+" object local file cache\n\n" +
-		"      Where '"+X+"' can be any of these object types:\n" +
+		"    -" + X + "[j] [Specifier]                 List all " + X + " objects tersely, with option for JSON output and/or match on Specifier\n" +
+		"    -" + X + "x                               Delete " + X + " object local file cache\n\n" +
+		"      Where '" + X + "' can be any of these object types:\n" +
 		"      d  = RBAC Role Definitions   a  = RBAC Role Assignments   s  = Azure Subscriptions  \n" +
 		"      m  = Management Groups       u  = Azure AD Users          g  = Azure AD Groups      \n" +
 		"      sp = Service Principals      ap = Applications            ad = Azure AD Roles\n" +
@@ -125,7 +125,7 @@ func main() {
 		case "-z":
 			maz.DumpVariables(z)
 		default:
-			c := rune(arg1[0]) // Grab 1st charater of string, to check if it's hex
+			c := rune(arg1[0])                            // Grab 1st charater of string, to check if it's hex
 			if utl.IsHexDigit(c) && utl.ValidUuid(arg1) { // If valid UUID, search/print matching object(s?)
 				maz.PrintObjectByUuid(arg1, z)
 			} else {
@@ -169,7 +169,7 @@ func main() {
 					}
 				}
 			}
-        case "-rm":
+		case "-rm":
 			maz.DeleteAzObject(arg2, z)
 		case "-up":
 			maz.UpsertAzObject(arg2, z)
