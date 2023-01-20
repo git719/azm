@@ -3,8 +3,8 @@ module zman
 go 1.19
 
 require (
-	github.com/git719/maz v0.9.4
-	github.com/git719/utl v1.0.12
+	github.com/git719/maz v0.9.5
+	github.com/git719/utl v1.0.13
 )
 
 require (

@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.5.1"
+	prgver  = "0.6.2"
 )
 
 func PrintUsage() {
@@ -137,6 +137,10 @@ func main() {
 		arg2 := os.Args[2]
 		z = maz.SetupApiTokens(&z)
 		switch arg1 {
+		case "-rm":
+			maz.DeleteAzObject(arg2, z)
+		case "-up":
+			maz.UpsertAzObject(arg2, z)
 		case "-vs":
 			maz.CompareSpecfileToAzure(arg2, z)
 		case "-dj", "-aj", "-sj", "-mj", "-uj", "-gj", "-spj", "-apj", "-adj":
@@ -169,10 +173,6 @@ func main() {
 					}
 				}
 			}
-		case "-rm":
-			maz.DeleteAzObject(arg2, z)
-		case "-up":
-			maz.UpsertAzObject(arg2, z)
 		default:
 			PrintUsage()
 		}
