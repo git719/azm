@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.6.5"
+	prgver  = "0.7.0"
 )
 
 func PrintUsage() {
@@ -45,6 +45,7 @@ func PrintUsage() {
 		"    -cr  TenantId ClientId Secret     Set up MSAL automated ClientId + Secret login\n" +
 		"    -cri TenantId Username            Set up MSAL interactive browser popup login\n" +
 		"    -tx                               Delete MSAL accessTokens cache file\n" +
+		"    -tc \"TokenString\"                 Dump token claims\n" +
 		"    -v                                Print this usage page\n")
 	os.Exit(0)
 }
@@ -141,6 +142,8 @@ func main() {
 			maz.DeleteAzObject(arg2, z)
 		case "-up":
 			maz.UpsertAzObject(arg2, z)
+		case "-tc":
+			maz.DecodeJwtToken(arg2)
 		case "-vs":
 			maz.CompareSpecfileToAzure(arg2, z)
 		case "-dj", "-aj", "-sj", "-mj", "-uj", "-gj", "-spj", "-apj", "-adj":
