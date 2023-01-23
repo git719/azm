@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.7.0"
+	prgver  = "0.7.1"
 )
 
 func PrintUsage() {
@@ -78,7 +78,6 @@ func SetupVariables(z *maz.Bundle) maz.Bundle {
 }
 
 func main() {
-	//TestFunction()
 	numberOfArguments := len(os.Args[1:]) // Not including the program itself
 	if numberOfArguments < 1 || numberOfArguments > 4 {
 		PrintUsage() // Don't accept less than 1 or more than 4 arguments
