@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.7.8"
+	prgver  = "0.7.9"
 )
 
 func PrintUsage() {
@@ -113,6 +113,8 @@ func main() {
 			for _, i := range all { // Print entire set tersely
 				maz.PrintTersely(t, i)
 			}
+		case "-ar":
+			maz.PrintRoleAssignmentReport(z)
 		case "-mt":
 			maz.PrintMgTree(z)
 		case "-pags":
