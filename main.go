@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.7.9"
+	prgver  = "0.8.0"
 )
 
 func PrintUsage() {
@@ -23,6 +23,10 @@ func PrintUsage() {
 		"    -up Specfile                      Create or update definition or assignment based on specfile (YAML or JSON)\n" +
 		"    -kd[j]                            Create a skeleton role-definition.yaml specfile (JSON option)\n" +
 		"    -ka[j]                            Create a skeleton role-assignment.yaml specfile (JSON option)\n" +
+		"    -spas SpUUID Expiry \"name\"        Add new secret to Service Principal, Expiry in YYYY-MM-DD format\n" +
+		"    -sprs SpUUID SecretID             Remove secret from Service Principal\n" +
+		"    -apas AppUUID Expiry \"name\"       Add new secret to application, Expiry in YYYY-MM-DD format\n" +
+		"    -aprs AppUUID SecretID            Remove secret from application\n" +
 		"\n" +
 		"    READER FUNCTIONS\n" +
 		"    UUID                              Show object for given UUID\n" +
@@ -165,6 +169,13 @@ func main() {
 			z.TenantId = arg2
 			z.Username = arg3
 			maz.SetupInterativeLogin(z)
+		}
+		z = maz.SetupApiTokens(&z) // The remaining 3-arg requests do API access
+		switch arg1 {
+		case "-sprs":
+			maz.RemoveSpSecret(arg2, arg3, z)
+		case "-aprs":
+			maz.RemoveAppSecret(arg2, arg3, z)
 		default:
 			PrintUsage()
 		}
@@ -179,6 +190,13 @@ func main() {
 			z.ClientId = arg3
 			z.ClientSecret = arg4
 			maz.SetupAutomatedLogin(z)
+		}
+		z = maz.SetupApiTokens(&z) // The remaining 4-arg requests do API access
+		switch arg1 {
+		case "-spas":
+			maz.AddSpSecret(arg2, arg3, arg4, z)
+		case "-apas":
+			maz.AddAppSecret(arg2, arg3, arg4, z)
 		default:
 			PrintUsage()
 		}
