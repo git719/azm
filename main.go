@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.8.9"
+	prgver  = "0.8.10"
 )
 
 func PrintUsage() {
