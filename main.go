@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.8.10"
+	prgver  = "0.9.2"
 )
 
 func PrintUsage() {
@@ -23,10 +23,10 @@ func PrintUsage() {
 		"    -up Specfile                      Create or update definition or assignment based on specfile (YAML or JSON)\n" +
 		"    -kd[j]                            Create a skeleton role-definition.yaml specfile (JSON option)\n" +
 		"    -ka[j]                            Create a skeleton role-assignment.yaml specfile (JSON option)\n" +
-		"    -spas SpUUID Expiry \"name\"        Add new secret to Service Principal, Expiry in YYYY-MM-DD format\n" +
-		"    -sprs SpUUID SecretID             Remove secret from Service Principal\n" +
-		"    -apas AppUUID Expiry \"name\"       Add new secret to application, Expiry in YYYY-MM-DD format\n" +
-		"    -aprs AppUUID SecretID            Remove secret from application\n" +
+		"    -spas SP_UUID \"name\" [Expiry]     Add secret to SP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)\n" +
+		"    -sprs SP_UUID SecretID            Remove secret from Service Principal\n" +
+		"    -apas APP_UUID \"name\" [Expiry]    Add secret to APP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)\n" +
+		"    -aprs APP_UUID SecretID           Remove secret from application\n" +
 		"\n" +
 		"    READER FUNCTIONS\n" +
 		"    UUID                              Show object for given UUID\n" +
@@ -176,6 +176,14 @@ func main() {
 			maz.RemoveSpSecret(arg2, arg3, z)
 		case "-aprs":
 			maz.RemoveAppSecret(arg2, arg3, z)
+		case "-spas":
+			expiryTime := utl.GetDateInDays("365")    // Set expiry to one year from now
+			expiry := expiryTime.Format("2006-01-02") // Convert to yyyy-mm-dd format
+			maz.AddSpSecret(arg2, arg3, expiry, z)
+		case "-apas":
+			expiryTime := utl.GetDateInDays("365")
+			expiry := expiryTime.Format("2006-01-02")
+			maz.AddAppSecret(arg2, arg3, expiry, z)
 		default:
 			PrintUsage()
 		}
