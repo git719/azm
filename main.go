@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "0.10.0"
+	prgver  = "0.10.1"
 )
 
 func PrintUsage() {
@@ -49,6 +49,8 @@ func PrintUsage() {
 		"    -cr  TenantId ClientId Secret     Set up MSAL automated ClientId + Secret login\n" +
 		"    -cri TenantId Username            Set up MSAL interactive browser popup login\n" +
 		"    -tx                               Delete MSAL accessTokens cache file\n" +
+		"    -tmg                              Dump current token string for MS Graph API\n" +
+		"    -taz                              Dump current token string for Azure Resource API\n" +
 		"    -tc \"TokenString\"                 Dump token claims\n" +
 		"    -v                                Print this usage page\n")
 	os.Exit(0)
@@ -130,6 +132,10 @@ func main() {
 			maz.CreateSkeletonFile(t)
 		case "-z":
 			maz.DumpVariables(z)
+		case "-tmg":
+			fmt.Println(z.MgToken)
+		case "-taz":
+			fmt.Println(z.AzToken)
 		default:
 			c := rune(arg1[0])                            // Grab 1st charater of string, to check if it's hex
 			if utl.IsHexDigit(c) && utl.ValidUuid(arg1) { // If valid UUID, search/print matching object(s?)
