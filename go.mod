@@ -3,8 +3,9 @@ module zman
 go 1.19
 
 require (
-	github.com/git719/maz v0.11.2
+	github.com/git719/maz v0.12.0
 	github.com/git719/utl v1.1.11
+	github.com/google/uuid v1.3.0
 )
 
 require (
@@ -12,7 +13,6 @@ require (
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/goccy/go-yaml v1.11.0 // indirect
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/gookit/color v1.5.2 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
