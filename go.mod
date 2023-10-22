@@ -1,9 +1,9 @@
 module zman
 
-go 1.19
+go 1.21.3
 
 require (
-	github.com/git719/maz v1.0.0
+	github.com/git719/maz v1.1.0
 	github.com/git719/utl v1.2.0
 	github.com/google/uuid v1.3.0
 )
