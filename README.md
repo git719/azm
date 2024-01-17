@@ -29,12 +29,14 @@ As the **usage** section shows, the secret Expiry defaults to 366 days if none i
 - The name could have been nulled with `""`
 - To remove above secret, you can simply do: `zman -aprs 51afab9e-0225-4c36-81f0-f42289c1a57a 7c140771-c547-43f9-8525-d08bd234e267`
 
+Another quick example is generating a random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier), which can always be handy. To do so, simply do: `zman -uuid`
+
 ## Introduction
 Everything else that applies to the [zls](https://github.com/git719/zls) utility also applies to this `zman` utility.
 
 ## Usage
 ```
-zman Azure Resource RBAC and MS Graph MANAGER v2.3.4
+zman Azure Resource RBAC and MS Graph MANAGER v2.4.0
     MANAGER FUNCTIONS
     -rm UUID|Specfile|"role name"     Delete role definition or assignment based on specifier
     -up Specfile                      Create or update definition or assignment based on specfile (YAML or JSON)
@@ -62,14 +64,13 @@ zman Azure Resource RBAC and MS Graph MANAGER v2.3.4
     -mt                               List Management Group and subscriptions tree
     -pags                             List all Azure AD Privileged Access Groups
     -st                               List local cache count and Azure count of all objects
-
-    -z                                Dump configured login values
-    -zr                               Dump runtime variables
-    -cr  TenantId ClientId Secret     Set up MSAL automated ClientId + Secret login
-    -cri TenantId Username            Set up MSAL interactive browser popup login
-    -tx                               Delete MSAL accessTokens cache file
     -tmg                              Dump current token string for MS Graph API
     -taz                              Dump current token string for Azure Resource API
     -tc "TokenString"                 Dump token claims
+
+    -id                               Display configured login values
+    -id TenantId Username             Set up user for interactive login
+    -id TenantId ClientId Secret      Set up ID for automated login
+    -tx                               Delete current configured login values and token
     -v                                Print this usage page
 ```

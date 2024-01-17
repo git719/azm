@@ -13,7 +13,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "2.3.4"
+	prgver  = "2.4.0"
 )
 
 func printUsage() {
@@ -45,15 +45,14 @@ func printUsage() {
 		"    -mt                               List Management Group and subscriptions tree\n" +
 		"    -pags                             List all Azure AD Privileged Access Groups\n" +
 		"    -st                               List local cache count and Azure count of all objects\n" +
-		"\n" +
-		"    -z                                Dump configured login values\n" +
-		"    -zr                               Dump runtime variables\n" +
-		"    -cr  TenantId ClientId Secret     Set up MSAL automated ClientId + Secret login\n" +
-		"    -cri TenantId Username            Set up MSAL interactive browser popup login\n" +
-		"    -tx                               Delete MSAL accessTokens cache file\n" +
 		"    -tmg                              Dump current token string for MS Graph API\n" +
 		"    -taz                              Dump current token string for Azure Resource API\n" +
 		"    -tc \"TokenString\"                 Dump token claims\n" +
+		"\n" +
+		"    -id                               Display configured login values\n" +
+		"    -id TenantId Username             Set up user for interactive login\n" +
+		"    -id TenantId ClientId Secret      Set up ID for automated login\n" +
+		"    -tx                               Delete current configured login values and token\n" +
 		"    -v                                Print this usage page\n")
 	os.Exit(0)
 }
@@ -101,17 +100,16 @@ func main() {
 		switch arg1 {
 		case "-v":
 			printUsage()
-		case "-z":
+		case "-id":
 			maz.DumpLoginValues(z)
-		case "-uuid":
-			utl.Die(uuid.New().String() + "\n")
 		case "-tx":
 			maz.RemoveCacheFile("t", z)
+			maz.RemoveCacheFile("id", z)
+		case "-uuid":
+			utl.Die(uuid.New().String() + "\n")
 		}
 		z = maz.SetupApiTokens(&z) // The remaining 1-arg requests DO required API tokens to be set up
 		switch arg1 {
-		case "-zr":
-			maz.DumpRuntimeValues(z)
 		case "-xx":
 			maz.RemoveCacheFile("all", z)
 		case "-dx", "-ax", "-sx", "-mx", "-ux", "-gx", "-spx", "-apx", "-adx":
@@ -177,7 +175,7 @@ func main() {
 		arg2 := os.Args[2]
 		arg3 := os.Args[3]
 		switch arg1 {
-		case "-cri":
+		case "-id":
 			z.TenantId = arg2
 			z.Username = arg3
 			maz.SetupInterativeLogin(z)
@@ -205,7 +203,7 @@ func main() {
 		arg3 := os.Args[3]
 		arg4 := os.Args[4]
 		switch arg1 {
-		case "-cr":
+		case "-id":
 			z.TenantId = arg2
 			z.ClientId = arg3
 			z.ClientSecret = arg4
