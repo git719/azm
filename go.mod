@@ -3,7 +3,7 @@ module zman
 go 1.21.3
 
 require (
-	github.com/git719/maz v1.8.0
+	github.com/git719/maz v1.8.1
 	github.com/git719/utl v1.3.0
 	github.com/google/uuid v1.3.1
 )

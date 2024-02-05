@@ -13,7 +13,7 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "2.4.0"
+	prgver  = "2.4.1"
 )
 
 func printUsage() {
@@ -32,7 +32,7 @@ func printUsage() {
 		"\n" +
 		"    READER FUNCTIONS\n" +
 		"    UUID                              Show object for given UUID\n" +
-		"    -vs Specfile                      Compare YAML or JSON specfile to what's in Azure (only for d and a objects)\n" +
+		"    -vs Specfile                      Compare specfile (YAML or JSON) to what's in Azure (only for d and a objects)\n" +
 		"    -" + X + "[j] [Specifier]                 List all " + X + " objects tersely, with option for JSON output and/or match on Specifier\n" +
 		"    -" + X + "x                               Delete " + X + " object local file cache\n\n" +
 		"      Where '" + X + "' can be any of these object types:\n" +
