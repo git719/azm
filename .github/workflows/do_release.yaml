@@ -32,22 +32,21 @@ jobs:
 
       - name: build_binaries
         run: |
-          ls -l build
-          exit 1
+          mkdir gobuild
           export GOARCH=$(uname -m)
           export ProgramName=$(head -1 go.mod | awk -F'/' '{print $NF}' | awk '{print $NF}')
           GOOS=linux
           BinaryName=${ProgramName}-${GOOS}-${GOARCH}
           go build -ldflags "-s -w" -o $BinaryName
-          tar czvf build/${BinaryName}.tgz $BinaryName
+          tar czvf gobuild/${BinaryName}.tgz $BinaryName
           GOOS=darwin
           BinaryName=${ProgramName}-${GOOS}-${GOARCH}
           go build -ldflags "-s -w" -o $BinaryName
-          tar czvf build/${BinaryName}.tgz $BinaryName
+          tar czvf gobuild/${BinaryName}.tgz $BinaryName
           GOOS=windows
           BinaryName=${ProgramName}-${GOOS}-${GOARCH}
           go build -ldflags "-s -w" -o $BinaryName.exe
-          zip build/${BinaryName}.zip $BinaryName.exe
+          zip gobuild/${BinaryName}.zip $BinaryName.exe
 
       - name: upload_release_assets
         uses: actions/upload-release-asset@v1
@@ -55,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/${{ matrix.binary }}.tgz
+          asset_path: ./gobuild/${{ matrix.binary }}.tgz
           asset_name: ${{ matrix.binary }}.tgz
           asset_content_type: application/gzip
         if: contains(matrix.os, 'windows') == false
@@ -66,7 +65,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/${{ matrix.binary }}.zip
+          asset_path: ./gobuild/${{ matrix.binary }}.zip
           asset_name: ${{ matrix.binary }}.zip
           asset_content_type: application/zip
         if: contains(matrix.os, 'windows')
