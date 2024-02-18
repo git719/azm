@@ -23,13 +23,7 @@ jobs:
       - name: checkout_github_action_code
         uses: actions/checkout@v4
         with:
-          ref: main
-          fetch-depth: 0
-
-      - name: chekout_tag
-        run: |
-          [[ $(git tag -l "${{ github.event.inputs.tag_name }}" ) ]] || echo "Tag does NOT exist." && exit 1
-          git checkout ${{ github.event.inputs.tag_name }}
+          ref: ref: ${{ github.event.inputs.tag_name }}
 
       - name: setup_go_environment
         uses: actions/setup-go@v5
