@@ -1,10 +1,20 @@
 # do_release.yaml
 name: do_release
 on:
-  workflow_dispatch:
   # push:
   #   tags:
   #     - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag Name'     
+        required: true              
+        type: choice
+        options:
+          - 'v2.0.0'
+          - 'v2.1.0'
+          - 'v2.2.0'
+          - 'Other'
 permissions:
   contents: write # Allow workflow to create releases
 jobs:
@@ -13,18 +23,18 @@ jobs:
     steps:
       - name: checkout_github_action_code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag_name }}
       - name: create_release
-        id: create_release
+        if: github.event.inputs.tag_name != 'Other'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Above is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.event.inputs.tag_name }}
+          release_name: Release ${{ github.event.inputs.tag_name }}
           draft: false
           prerelease: false
-          body: |
-            Changes in this Release
-            - First change
-            - Second change
+          body: 'Release ${{ github.event.inputs.tag_name }}'
+          
