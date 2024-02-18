@@ -44,10 +44,10 @@ jobs:
           export ProgramName=$(head -1 go.mod | awk -F'/' '{print $NF}' | awk '{print $NF}')
           GOOS=linux
           GOARCH=amd64
-          export BinaryName=${ProgramName}-${GOOS}-${GOARCH}
+          BinaryName=${ProgramName}-${GOOS}-${GOARCH}
+          echo "BinaryName=${BinaryName}" >> $GITHUB_ENV
           go build -ldflags "-s -w" -o $BinaryName
           tar czvf ${BinaryName}.tgz $BinaryName
-          
 
       - name: create_release
         id: create_release
@@ -70,6 +70,6 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           # Above is the upload URL for the release
-          asset_path: ${BinaryName}.tgz
-          asset_name: ${BinaryName}.tgz
+          asset_path: ${{ env.BinaryName }}.tgz
+          asset_name: ${{ env.BinaryName }}.tgz
           asset_content_type: application/gzip
