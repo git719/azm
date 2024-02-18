@@ -71,6 +71,8 @@ jobs:
           BinaryName=${ProgramName}-${GOOS}-${GOARCH}
           go build -ldflags "-s -w" -o $BinaryName.exe
           zip gobuild/${BinaryName}.zip $BinaryName.exe
+          ls -l gobuild/
+          echo "{name}={value}" >> $GITHUB_OUTPUT
 
       - name: create_release
         id: create_release
