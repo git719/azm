@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Input Tag Version Number'     
+        description: 'Input tag version to release'     
         required: true              
         type: text
 
