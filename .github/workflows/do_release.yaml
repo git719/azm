@@ -35,44 +35,19 @@ jobs:
         with:
           go-version: '1.22.0'
           
-      - name: build_binaries
+      - name: build_artifact
         run: |
-          ARCH=$(uname -m)
-          case "$ARCH" in
-            x86_64)
-              GOARCH="amd64"
-              ;;
-            aarch64)
-              GOARCH="arm64"
-              ;;
-            arm*)
-              GOARCH="arm"
-              ;;
-            i386)
-              GOARCH="386"
-              ;;
-            *)
-              echo "Unsupported architecture: $ARCH"
-              exit 1
-              ;;
-          esac
-          export GOARCH
-          mkdir gobuild
+          if [[ "$(uname -m)" != "x86_64" ]]; then
+            echo "Error. This runner Linux image is not x86_64/amd64!"
+            exit 1
+          fi
           export ProgramName=$(head -1 go.mod | awk -F'/' '{print $NF}' | awk '{print $NF}')
           GOOS=linux
-          BinaryName=${ProgramName}-${GOOS}-${GOARCH}
+          GOARCH=amd64
+          export BinaryName=${ProgramName}-${GOOS}-${GOARCH}
           go build -ldflags "-s -w" -o $BinaryName
-          tar czvf gobuild/${BinaryName}.tgz $BinaryName
-          GOOS=darwin
-          BinaryName=${ProgramName}-${GOOS}-${GOARCH}
-          go build -ldflags "-s -w" -o $BinaryName
-          tar czvf gobuild/${BinaryName}.tgz $BinaryName
-          GOOS=windows
-          BinaryName=${ProgramName}-${GOOS}-${GOARCH}
-          go build -ldflags "-s -w" -o $BinaryName.exe
-          zip gobuild/${BinaryName}.zip $BinaryName.exe
-          ls -l gobuild/
-          echo "{name}={value}" >> $GITHUB_OUTPUT
+          tar czvf ${BinaryName}.tgz $BinaryName
+          
 
       - name: create_release
         id: create_release
@@ -94,29 +69,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./gobuild/${{ matrix.binary }}.tgz
-          asset_name: ${{ matrix.binary }}.tgz
+          # Above is the upload URL for the release
+          asset_path: ${BinaryName}.tgz
+          asset_name: ${BinaryName}.tgz
           asset_content_type: application/gzip
-        if: contains(matrix.os, 'windows') == false
-
-      - name: upload_release_assets_windows
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./gobuild/${{ matrix.binary }}.zip
-          asset_name: ${{ matrix.binary }}.zip
-          asset_content_type: application/zip
-        if: contains(matrix.os, 'windows')
-
-      # - name: upload_release_assets
-      #   uses: actions/upload-release-asset@v1
-      #   #env:
-      #   #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     # Above is the upload URL for the release
-      #     asset_path: ./myprogram.tgz
-      #     asset_name: myprogram.tgz
-      #     asset_content_type: application/gzip
