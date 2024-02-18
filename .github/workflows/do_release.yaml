@@ -5,6 +5,8 @@ on:
   # push:
   #   tags:
   #     - 'v*'
+permissions:
+  contents: write # Allow workflow to create releases
 jobs:
   do_release:
     runs-on: ubuntu-latest
