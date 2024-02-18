@@ -23,7 +23,7 @@ jobs:
       - name: checkout_github_action_code
         uses: actions/checkout@v4
         with:
-          ref: ref: ${{ github.event.inputs.tag_name }}
+          ref: ${{ github.event.inputs.tag_name }}
 
       - name: setup_go_environment
         uses: actions/setup-go@v5
