@@ -32,7 +32,6 @@ jobs:
 
       - name: build_binaries
         run: |
-          #mkdir build
           ls -l build
           exit 1
           export GOARCH=$(uname -m)
