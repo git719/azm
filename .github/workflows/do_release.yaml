@@ -32,8 +32,27 @@ jobs:
 
       - name: build_binaries
         run: |
+          ARCH=$(uname -m)
+          case "$ARCH" in
+            x86_64)
+              GOARCH="amd64"
+              ;;
+            aarch64)
+              GOARCH="arm64"
+              ;;
+            arm*)
+              GOARCH="arm"
+              ;;
+            i386)
+              GOARCH="386"
+              ;;
+            *)
+              echo "Unsupported architecture: $ARCH"
+              exit 1
+              ;;
+          esac
+          export GOARCH
           mkdir gobuild
-          export GOARCH=$(uname -m)
           export ProgramName=$(head -1 go.mod | awk -F'/' '{print $NF}' | awk '{print $NF}')
           GOOS=linux
           BinaryName=${ProgramName}-${GOOS}-${GOARCH}
