@@ -33,6 +33,8 @@ jobs:
       - name: build_binaries
         run: |
           mkdir build
+          ls -l build
+          exit 1
           export GOARCH=$(uname -m)
           export ProgramName=$(head -1 go.mod | awk -F'/' '{print $NF}' | awk '{print $NF}')
           GOOS=linux
