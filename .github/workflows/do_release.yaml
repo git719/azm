@@ -30,6 +30,11 @@ jobs:
         with:
           ref: ${{ github.event.inputs.tag_name }}
 
+      - name: setup_go_environment
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.0'
+          
       - name: build_binaries
         run: |
           ARCH=$(uname -m)
@@ -67,6 +72,20 @@ jobs:
           go build -ldflags "-s -w" -o $BinaryName.exe
           zip gobuild/${BinaryName}.zip $BinaryName.exe
 
+      - name: create_release
+        id: create_release
+        if: github.event.inputs.tag_name != 'Other'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Above is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.event.inputs.tag_name }}
+          release_name: Release ${{ github.event.inputs.tag_name }}
+          draft: false
+          prerelease: false
+          body: 'Release ${{ github.event.inputs.tag_name }}'
+
       - name: upload_release_assets
         uses: actions/upload-release-asset@v1
         env:
@@ -99,18 +118,3 @@ jobs:
       #     asset_path: ./myprogram.tgz
       #     asset_name: myprogram.tgz
       #     asset_content_type: application/gzip
-
-      - name: create_release
-        id: create_release
-        if: github.event.inputs.tag_name != 'Other'
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Above is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.event.inputs.tag_name }}
-          release_name: Release ${{ github.event.inputs.tag_name }}
-          draft: false
-          prerelease: false
-          body: 'Release ${{ github.event.inputs.tag_name }}'
-          
