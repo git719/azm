@@ -20,6 +20,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: confirm_tag_exists
+        run: |
+          if git rev-parse ${{ github.event.inputs.tag_name }} >/dev/null 2>&1; then
+            echo "Tag exists."
+          else
+            echo "Tag does NOT exist."
+            exit 1
+          fi
+          
       - name: checkout_github_action_code
         uses: actions/checkout@v4
         with:
