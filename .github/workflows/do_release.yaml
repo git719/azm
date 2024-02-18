@@ -21,13 +21,7 @@ jobs:
     steps:
 
       - name: confirm_tag_exists
-        run: |
-          if git rev-parse ${{ github.event.inputs.tag_name }} >/dev/null 2>&1; then
-            echo "Tag exists."
-          else
-            echo "Tag does NOT exist."
-            exit 1
-          fi
+        run: [[ $(git tag -l "2.3.4") ]] || echo "Tag does NOT exist." && exit 1
           
       - name: checkout_github_action_code
         uses: actions/checkout@v4
