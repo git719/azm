@@ -20,14 +20,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: confirm_tag_exists
-        run: |
-          [[ $(git tag -l "2.3.4") ]] || echo "Tag does NOT exist." && exit 1
-          
       - name: checkout_github_action_code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.tag_name }}
+          ref: main
+
+      - name: chekout_tag
+        run: |
+          [[ $(git tag -l "${{ github.event.inputs.tag_name }}" ) ]] || echo "Tag does NOT exist." && exit 1
+          git checkout ${{ github.event.inputs.tag_name }}
 
       - name: setup_go_environment
         uses: actions/setup-go@v5
