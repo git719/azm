@@ -8,14 +8,9 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Tag Name'     
+        description: 'Input Tag Version Number'     
         required: true              
-        type: choice
-        options:
-          - 'v2.0.0'
-          - 'v2.1.0'
-          - 'v2.2.0'
-          - 'Other'
+        type: text
 
 permissions:
   contents: write # Allow workflow to create releases
