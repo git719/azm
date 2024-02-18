@@ -1,5 +1,6 @@
 # do_release.yaml
 name: do_release
+
 on:
   # push:
   #   tags:
@@ -15,16 +16,20 @@ on:
           - 'v2.1.0'
           - 'v2.2.0'
           - 'Other'
+
 permissions:
   contents: write # Allow workflow to create releases
+
 jobs:
   do_release:
     runs-on: ubuntu-latest
     steps:
+
       - name: checkout_github_action_code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.tag_name }}
+
       - name: build_binaries
         run: |
           mkdir build
@@ -34,24 +39,48 @@ jobs:
           BinaryName=${ProgramName}-${GOOS}-${GOARCH}
           go build -ldflags "-s -w" -o $BinaryName
           tar czvf build/${BinaryName}.tgz $BinaryName
-          GOOS=windows
-          BinaryName=${ProgramName}-${GOOS}-${GOARCH}
-          go build -ldflags "-s -w" -o $BinaryName.exe
-          zip build/${BinaryName}.zip $BinaryName.exe
           GOOS=darwin
           BinaryName=${ProgramName}-${GOOS}-${GOARCH}
           go build -ldflags "-s -w" -o $BinaryName
           tar czvf build/${BinaryName}.tgz $BinaryName
+          GOOS=windows
+          BinaryName=${ProgramName}-${GOOS}-${GOARCH}
+          go build -ldflags "-s -w" -o $BinaryName.exe
+          zip build/${BinaryName}.zip $BinaryName.exe
+
       - name: upload_release_assets
         uses: actions/upload-release-asset@v1
-        #env:
-        #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          # Above is the upload URL for the release
-          asset_path: ./myprogram.tgz
-          asset_name: myprogram.tgz
+          asset_path: ./build/${{ matrix.binary }}.tgz
+          asset_name: ${{ matrix.binary }}.tgz
           asset_content_type: application/gzip
+        if: contains(matrix.os, 'windows') == false
+
+      - name: upload_release_assets_windows
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/${{ matrix.binary }}.zip
+          asset_name: ${{ matrix.binary }}.zip
+          asset_content_type: application/zip
+        if: contains(matrix.os, 'windows')
+
+      # - name: upload_release_assets
+      #   uses: actions/upload-release-asset@v1
+      #   #env:
+      #   #  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     # Above is the upload URL for the release
+      #     asset_path: ./myprogram.tgz
+      #     asset_name: myprogram.tgz
+      #     asset_content_type: application/gzip
+
       - name: create_release
         id: create_release
         if: github.event.inputs.tag_name != 'Other'
