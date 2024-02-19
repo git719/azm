@@ -1,34 +1,25 @@
-name: do_release
-
+name: release_manually
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       tag_name:
         description: 'Input tag version to release'     
         required: true              
         type: text
-
 permissions:
   contents: write # Allow workflow to create releases
-
 jobs:
   do_release:
     runs-on: ubuntu-latest
     steps:
-
       - name: checkout_github_action_code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.tag_name }}
-
       - name: setup_go_environment
         uses: actions/setup-go@v5
         with:
           go-version: '1.22.0'
-          
       - name: build_artifact
         run: |
           if [[ "$(uname -m)" != "x86_64" ]]; then
@@ -42,7 +33,6 @@ jobs:
           echo "BinaryName=${BinaryName}" >> $GITHUB_ENV
           go build -ldflags "-s -w" -o $BinaryName
           tar czvf ${BinaryName}.tgz $BinaryName
-
       - name: create_release
         id: create_release
         uses: actions/create-release@v1
@@ -55,7 +45,6 @@ jobs:
           draft: false
           prerelease: false
           body: 'Release ${{ github.event.inputs.tag_name }}'
-
       - name: upload_release_assets
         uses: actions/upload-release-asset@v1
         env:
