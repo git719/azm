@@ -36,10 +36,10 @@ Everything else that applies to the [zls](https://github.com/git719/zls) utility
 
 ## Usage
 ```
-zman Azure Resource RBAC and MS Graph MANAGER v2.4.0
+zman Azure Resource RBAC and MS Graph MANAGER v2.4.5
     MANAGER FUNCTIONS
-    -rm UUID|Specfile|"role name"     Delete role definition or assignment based on specifier
-    -up Specfile                      Create or update definition or assignment based on specfile (YAML or JSON)
+    -rm[f] UUID|Specfile|"role name"  Delete role definition or assignment based on specifier; force option
+    -up[f] Specfile                   Create or update definition or assignment based on specfile (YAML or JSON); force option
     -kd[j]                            Create a skeleton role-definition.yaml specfile (JSON option)
     -ka[j]                            Create a skeleton role-assignment.yaml specfile (JSON option)
     -spas SP_UUID "name" [Expiry]     Add secret to SP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)
@@ -50,7 +50,7 @@ zman Azure Resource RBAC and MS Graph MANAGER v2.4.0
 
     READER FUNCTIONS
     UUID                              Show object for given UUID
-    -vs Specfile                      Compare YAML or JSON specfile to what's in Azure (only for d and a objects)
+    -vs Specfile                      Compare specfile (YAML or JSON) to what's in Azure (only for d and a objects)
     -X[j] [Specifier]                 List all X objects tersely, with option for JSON output and/or match on Specifier
     -Xx                               Delete X object local file cache
 
