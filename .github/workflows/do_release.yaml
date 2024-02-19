@@ -46,7 +46,6 @@ jobs:
 
       - name: create_release
         id: create_release
-        if: github.event.inputs.tag_name != 'Other'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
