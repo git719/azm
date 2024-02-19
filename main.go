@@ -14,15 +14,15 @@ import (
 
 const (
 	prgname = "zman"
-	prgver  = "2.4.3"
+	prgver  = "2.4.4"
 )
 
 func printUsage() {
 	X := utl.Red("X")
 	fmt.Printf(prgname + " Azure Resource RBAC and MS Graph MANAGER v" + prgver + "\n" +
 		"    MANAGER FUNCTIONS\n" +
-		"    -rm UUID|Specfile|\"role name\"     Delete role definition or assignment based on specifier\n" +
-		"    -up Specfile                      Create or update definition or assignment based on specfile (YAML or JSON)\n" +
+		"    -rm[f] UUID|Specfile|\"role name\"  Delete role definition or assignment based on specifier; force option\n" +
+		"    -up[f] Specfile                   Create or update definition or assignment based on specfile (YAML or JSON); force option\n" +
 		"    -kd[j]                            Create a skeleton role-definition.yaml specfile (JSON option)\n" +
 		"    -ka[j]                            Create a skeleton role-assignment.yaml specfile (JSON option)\n" +
 		"    -spas SP_UUID \"name\" [Expiry]     Add secret to SP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)\n" +
@@ -154,10 +154,18 @@ func main() {
 		arg2 := os.Args[2]
 		z = maz.SetupApiTokens(&z)
 		switch arg1 {
-		case "-rm":
-			maz.DeleteAzObject(arg2, z)
-		case "-up":
-			maz.UpsertAzObject(arg2, z)
+		case "-rm", "-rmf":
+			force := false
+			if arg1 == "-rmf" {
+				force = true
+			}
+			maz.DeleteAzObject(force, arg2, z)
+		case "-up", "-upf":
+			force := false
+			if arg1 == "-upf" {
+				force = true
+			}
+			maz.UpsertAzObject(force, arg2, z)
 		case "-tc":
 			maz.DecodeJwtToken(arg2)
 		case "-vs":
