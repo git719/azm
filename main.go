@@ -4,16 +4,17 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+
 	"github.com/git719/maz"
 	"github.com/git719/utl"
 	"github.com/google/uuid"
-	"os"
-	"path/filepath"
 )
 
 const (
 	prgname = "zman"
-	prgver  = "2.4.2"
+	prgver  = "2.4.3"
 )
 
 func printUsage() {
