@@ -1,0 +1,66 @@
+name: do_release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Input tag version to release'     
+        required: false              
+        type: text
+
+permissions:
+  contents: write # Allow workflow to create releases
+
+jobs:
+  do_release:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout_github_action_code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: setup_go_environment
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.0'
+          
+      - name: build_artifact
+        run: |
+          if [[ "$(uname -m)" != "x86_64" ]]; then
+            echo "Error. This runner Linux image is not x86_64/amd64!"
+            exit 1
+          fi
+          export ProgramName=$(head -1 go.mod | awk -F'/' '{print $NF}' | awk '{print $NF}')
+          GOOS=linux
+          GOARCH=amd64
+          BinaryName=${ProgramName}-${GOOS}-${GOARCH}
+          echo "BinaryName=${BinaryName}" >> $GITHUB_ENV
+          go build -ldflags "-s -w" -o $BinaryName
+          tar czvf ${BinaryName}.tgz $BinaryName
+
+      - name: create_release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          body: 'Release ${{ github.ref_name }}'
+
+      - name: upload_release_assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ env.BinaryName }}.tgz
+          asset_name: ${{ env.BinaryName }}.tgz
+          asset_content_type: application/gzip
