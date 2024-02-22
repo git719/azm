@@ -1,4 +1,4 @@
-# azm
+## azm
 `azm` is a [CLI](https://en.wikipedia.org/wiki/Command-line_interface) utility for managing [Indentity and Access Management (IAM)](https://www.nist.gov/identity-access-management) related Azure objects. It is a little _Swiss Army knife_ that can very quickly do the following:
 
 1. Read-Only Functions
@@ -17,7 +17,7 @@
         - Azure AD Roles that have been **activated**
         - Azure AD Roles standard definitions
     - Compare RBAC role definitions and assignments that are defined in a YAML __specification file__ to what that object currently looks like in the Azure tenant.
-    - Dump the current Resources or Security JWT token being used (which can be used as a [simple Azure REST API caller](https://github.com/git719/azm/tree/main/pman) for testing purposes) 
+    - Dump the current Resources or Security JWT tokens (see **pman** below)
     - Perform *many* other related listing functions.
 2. Read-Write Functions
     > **Note**<br>
@@ -31,7 +31,7 @@
         - Applications: Can only create or delete App secrets (Cannot yet create Apps)
     - Create a UUID
 
-## Quick Example
+### Quick Example
 A quick example is adding a secret to an Application object: 
 
 ```
@@ -51,12 +51,12 @@ As the **usage** section shows, the secret Expiry defaults to 366 days if none i
 
 Another quick example is generating a random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier), which can always be handy. To do so, simply do: `azm -uuid`
 
-## Usage
+### Usage
 ```
 azm Azure IAM utility v2.4.8
     Read-Only Functions
     UUID                              Show object for given UUID
-    -vs Specfile                      Compare specfile (YAML or JSON) to what's in Azure (only for d and a objects)
+    -vs Specfile                      Compare YAML specfile to what's in Azure (only for d and a objects)
     -X[j] [Specifier]                 List all X objects tersely, with option for JSON output and/or match on Specifier
     -Xx                               Delete X object local file cache
 
@@ -67,9 +67,9 @@ azm Azure IAM utility v2.4.8
 
     Read-Write Functions
     -rm[f] UUID|Specfile|"role name"  Delete role definition or assignment based on specifier; force option
-    -up[f] Specfile                   Create or update definition or assignment based on specfile (YAML or JSON); force option
-    -kd[j]                            Create a skeleton role-definition.yaml specfile (JSON option)
-    -ka[j]                            Create a skeleton role-assignment.yaml specfile (JSON option)
+    -up[f] Specfile                   Create or update definition or assignment based on YAML specfile; force option
+    -kd[j]                            Create a skeleton role-definition.yaml specfile
+    -ka[j]                            Create a skeleton role-assignment.yaml specfile
     -spas SP_UUID "name" [Expiry]     Add secret to SP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)
     -sprs SP_UUID SecretID            Remove secret from Service Principal
     -apas APP_UUID "name" [Expiry]    Add secret to APP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)
@@ -91,3 +91,15 @@ azm Azure IAM utility v2.4.8
     -tx                               Delete current configured login values and token
     -v                                Print this usage page
 ```
+
+### pman
+[pman](https://github.com/git719/azm/tree/main/pman) is a poor man's REST API Postman BASH script, which leverages `azm`'s `-tmg` and `-taz` arguments to get the current user's token to make other generic REST API calls against those 2 Microsoft APIs.
+
+### Token Sample Code
+Included in this repo are examples of how to get a Microsoft token with 3 different languages. The token can be for any API. The examples use Docker Compose.
+1. [Python Example](https://github.com/git719/azm/tree/main/token-python)
+2. [PowerShell Example](https://github.com/git719/azm/tree/main/token-powershell)
+3. [Node Example](https://github.com/git719/azm/tree/main/token-node)
+
+### Container
+There is also a Docker Compose file and a Dockerfile for an example of how to use this program within a container.
