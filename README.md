@@ -9,7 +9,9 @@ Microsoft already has an official [Azure CLI tool](https://learn.microsoft.com/e
 - Compiles into a binary executable that can easily be used from Windows, Linux, or macOS operating systems
 - Automatic Linux [releases](https://github.com/git719/azm/releases/tag/v2.4.8) can easily be used in Github workflows
 - Supports leveraging OIDC Github Action workflows with no passwords for configured Service Principal
-  
+
+**PS:** Every repo should have a **Why?** entry at the top 😊
+
 
 ### Functions
 This is a little _Swiss Army knife_ that can very quickly perform the following functions:
@@ -42,6 +44,7 @@ This is a little _Swiss Army knife_ that can very quickly perform the following 
         - Service Principals: Can only create or delete SP secrets (Cannot yet create SPs)
         - Applications: Can only create or delete App secrets (Cannot yet create Apps)
     - Create a UUID
+
 
 ### Quick Examples
 1. List any Azure RBAC role, like the Built-in "Billing Reader" role for example:
@@ -92,6 +95,7 @@ As the **usage** section shows, the secret Expiry defaults to 366 days if none i
 
 3. Generate a random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier). This can be very handy sometimes. Simply do: `azm -uuid`
 
+
 ### Usage
 ```
 azm Azure IAM utility v2.4.8
@@ -132,9 +136,12 @@ azm Azure IAM utility v2.4.8
     -tx                               Delete current configured login values and token
     -v                                Print this usage page
 ```
+Instead of documenting individual examples of all of the above switches, it is best for you to play around with the utility to see the different listing functionality that it offers.
+
 
 ### pman
 [pman](https://github.com/git719/azm/tree/main/pman) is a poor man's REST API Postman BASH script, which leverages `azm`'s `-tmg` and `-taz` arguments to get the current user's token to make other generic REST API calls against those 2 Microsoft APIs.
+
 
 ### Token Sample Code
 Included in this repo are examples of how to get a Microsoft token with 3 different languages. The token can be for any API. The examples use Docker Compose.
@@ -142,5 +149,21 @@ Included in this repo are examples of how to get a Microsoft token with 3 differ
 2. [PowerShell Example](https://github.com/git719/azm/tree/main/token-powershell)
 3. [Node Example](https://github.com/git719/azm/tree/main/token-node)
 
+
 ### Container
 There is also a Docker Compose file and a Dockerfile for an example of how to use this program within a container.
+
+
+### To-Do and Known Issues
+The program is stable enough to be relied on as a small utility, but there are a number of little niggly things that could be improved. Will put a list together at some point.
+
+At any rate, no matter how stable any code is, it is always worth remembering computer scientist [Tony Hoare](https://en.wikipedia.org/wiki/Tony_Hoare)'s famous quote:
+> "Inside every large program is a small program struggling to get out."
+
+
+### Coding Philosophy and Feedback
+The primary goal of this utility is to serve as a study aid for coding Azure utilities in Go, as well as to serve as a quick _Swiss Army knife* utility for managin tenant IAM objects. If you look through the code I think you will find that is relatively straightforward. There is a deliberate effor to keep the code as clear as possible, and simple to understand and maintain.
+
+Note that the bulk of the code is actually in the [maz](https://github.com/git719/maz) library, and other packages. Please visit that repo for more info.
+
+This utility along with the required libraries are obviously very useful to me. I don't think I'm going to formalize the way to contribute to this project, but if you find it useful and have some improvement suggestion please let me know. Anyway, this is published as an open source project, so feel free to clone and use on your own, with proper attributions.
