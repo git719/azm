@@ -1,6 +1,17 @@
 ## azm
 `azm` is a [CLI](https://en.wikipedia.org/wiki/Command-line_interface) utility for managing [Indentity and Access Management (IAM)](https://www.nist.gov/identity-access-management) related Azure objects. It is a little _Swiss Army knife_ that can very quickly do the following:
 
+
+### Why?
+Microsoft already has an official [Azure CLI tool](https://learn.microsoft.com/en-us/cli/azure/) called `az`, so **why** this?
+- Only focuses on a smaller set of Azure object types related to IAM 
+- This is written in [Go](https://go.dev/), so it's much faster than `az`
+- Compiles into a binary executable that can easily be used from Windows, Linux, or macOS operating systems
+- Automatic Linux [releases](https://github.com/git719/azm/releases/tag/v2.4.8) can easily be used in Github workflows
+- Supports leveraging OIDC Github Action workflows with no passwords for configured Service Principal
+  
+
+### Functions
 1. Read-Only Functions
     > **Note**<br>
     Of course these Read-Only functions are *only* available if you setup the tool to logon with an account that has the respective Read-Only privileges.
@@ -31,8 +42,37 @@
         - Applications: Can only create or delete App secrets (Cannot yet create Apps)
     - Create a UUID
 
-### Quick Example
-A quick example is adding a secret to an Application object: 
+### Quick Examples
+1. List any Azure RBAC role, like the Built-in "Billing Reader" role for example:
+
+```
+$ azm -d "Billing Reader"
+id: fa23ad8b-c56e-40d8-ac0c-ce449e1d2c64
+properties:
+  roleName: Billing Reader
+  description: Allows read access to billing data
+  assignableScopes:
+    - /
+  permissions:
+    - actions:
+        - Microsoft.Authorization/*/read
+        - Microsoft.Billing/*/read
+        - Microsoft.Commerce/*/read
+        - Microsoft.Consumption/*/read
+        - Microsoft.Management/managementGroups/read
+        - Microsoft.CostManagement/*/read
+        - Microsoft.Support/*
+      notActions:
+      dataActions:
+      notDataActions:
+```
+
+- Another way of listing the same role is to call it by its UUID: `azm -d fa23ad8b-c56e-40d8-ac0c-ce449e1d2c64`
+- The YAML listing format is more human-friendly and easier to read, and only displays the attributes that are most relevant to Azure systems engineers
+- You can also display it in JSON format by calling: `azm -dj fa23ad8b-c56e-40d8-ac0c-ce449e1d2c64`
+- One advantage of the JSON format is that it displays every single attribute in the Azure object
+
+2. Add a secret to an Application object: 
 
 ```
 $ azm -apas 51afab9e-0225-4c36-81f0-f42289c1a57a "My Secret"
@@ -49,7 +89,7 @@ As the **usage** section shows, the secret Expiry defaults to 366 days if none i
 - The name could have been nulled with `""`
 - To remove above secret, you can simply do: `azm -aprs 51afab9e-0225-4c36-81f0-f42289c1a57a 7c140771-c547-43f9-8525-d08bd234e267`
 
-Another quick example is generating a random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier), which can always be handy. To do so, simply do: `azm -uuid`
+3. Generate a random [UUID](https://en.wikipedia.org/wiki/Universally_unique_identifier). This can be very handy sometimes. Simply do: `azm -uuid`
 
 ### Usage
 ```
