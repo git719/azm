@@ -1,4 +1,4 @@
-module zman
+module azm
 
 go 1.21.3
 
