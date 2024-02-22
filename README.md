@@ -1,5 +1,5 @@
 ## azm
-`azm` is a [CLI](https://en.wikipedia.org/wiki/Command-line_interface) utility for managing [Indentity and Access Management (IAM)](https://www.nist.gov/identity-access-management) related Azure objects. It is a little _Swiss Army knife_ that can very quickly do the following:
+`azm` is a [CLI](https://en.wikipedia.org/wiki/Command-line_interface) utility for managing [Indentity and Access Management (IAM)](https://www.nist.gov/identity-access-management) related Azure objects.
 
 
 ### Why?
@@ -12,6 +12,7 @@ Microsoft already has an official [Azure CLI tool](https://learn.microsoft.com/e
   
 
 ### Functions
+This is a little _Swiss Army knife_ that can very quickly perform the following functions:
 1. Read-Only Functions
     > **Note**<br>
     Of course these Read-Only functions are *only* available if you setup the tool to logon with an account that has the respective Read-Only privileges.
