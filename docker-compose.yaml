@@ -1,0 +1,26 @@
+version: '3'
+services:
+  azm:
+    build:
+      context: .  # Path to your GoLang application code
+      dockerfile: Dockerfile
+    image: azm
+    command: sh -c '
+      echo "===========" &&
+      cat /etc/os-release &&
+      echo "===========" &&
+      azm -id &&
+      echo "===========" &&
+      azm -s'
+    container_name: azm
+    volumes:
+      - ./:/app
+    environment:
+      - MAZ_CLIENT_ID=${MAZ_CLIENT_ID}
+      - MAZ_CLIENT_SECRET=${MAZ_CLIENT_SECRET}
+      - MAZ_TENANT_ID=${MAZ_TENANT_ID}
+    working_dir: /app
+
+# BUILD & RUN: docker compose up --build
+# JUST RUN   : docker compose up
+# INSPECT    : docker compose run --build azm bash
