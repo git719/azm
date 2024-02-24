@@ -12,47 +12,49 @@ import (
 
 const (
 	prgname = "azm"
-	prgver  = "2.4.8"
+	prgver  = "2.4.9"
 )
 
 func printUsage() {
 	X := utl.Red("X")
-	fmt.Printf(prgname + " Azure IAM utility v" + prgver + "\n" +
-		"    Read-Only Functions\n" +
-		"    UUID                              Show object for given UUID\n" +
-		"    -vs Specfile                      Compare YAML specfile to what's in Azure (only for d and a objects)\n" +
-		"    -" + X + "[j] [Specifier]                 List all " + X + " objects tersely, with option for JSON output and/or match on Specifier\n" +
-		"    -" + X + "x                               Delete " + X + " object local file cache\n\n" +
-		"      Where '" + X + "' can be any of these object types:\n" +
-		"      d  = RBAC Role Definitions   a  = RBAC Role Assignments   s  = Azure Subscriptions  \n" +
-		"      m  = Management Groups       u  = Azure AD Users          g  = Azure AD Groups      \n" +
-		"      sp = Service Principals      ap = Applications            ad = Azure AD Roles\n" +
+	fmt.Printf(prgname + " v" + prgver + "\n" +
+		"  Azure IAM utility. See <https://github.com/git719/azm>\n\n" +
+		"  Read-Only Functions\n" +
+		"  UUID                              Show object(s) related to given UUID\n" +
+		"  -vs Specfile                      Compare YAML specfile to what's in Azure (only for d and a objects)\n" +
+		"  -" + X + "[j] [Specifier]                 List all " + X + " objects tersely, with option for JSON output and/or match on Specifier\n\n" +
+		"    Where '" + X + "' can be any of these object types:\n" +
+		"    d  = RBAC Role Definitions   a  = RBAC Role Assignments   s  = Azure Subscriptions  \n" +
+		"    m  = Management Groups       u  = Azure AD Users          g  = Azure AD Groups      \n" +
+		"    sp = Service Principals      ap = Applications            ad = Azure AD Roles\n" +
 		"\n" +
-		"    Read-Write Functions\n" +
-		"    -rm[f] UUID|Specfile|\"role name\"  Delete role definition or assignment based on specifier; force option\n" +
-		"    -up[f] Specfile                   Create or update definition or assignment based on YAML specfile; force option\n" +
-		"    -kd[j]                            Create a skeleton role-definition.yaml specfile\n" +
-		"    -ka[j]                            Create a skeleton role-assignment.yaml specfile\n" +
-		"    -spas SP_UUID \"name\" [Expiry]     Add secret to SP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)\n" +
-		"    -sprs SP_UUID SecretID            Remove secret from Service Principal\n" +
-		"    -apas APP_UUID \"name\" [Expiry]    Add secret to APP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)\n" +
-		"    -aprs APP_UUID SecretID           Remove secret from application\n" +
-		"    -uuid                             Generate new UUID\n" +
+		"  -ar                               List all RBAC role assignments with resolved names\n" +
+		"  -mt                               List Management Group and subscriptions tree\n" +
+		"  -pags                             List all Azure AD Privileged Access Groups\n" +
+		"  -st                               List local cache count and Azure count of all objects\n" +
+		"  -tmg                              Dump current token string for MS Graph API\n" +
+		"  -taz                              Dump current token string for Azure Resource API\n" +
+		"  -tc \"TokenString\"                 Dump token claims\n" +
 		"\n" +
-		"    -xx                               Delete ALL cache local files\n" +
-		"    -ar                               List all RBAC role assignments with resolved names\n" +
-		"    -mt                               List Management Group and subscriptions tree\n" +
-		"    -pags                             List all Azure AD Privileged Access Groups\n" +
-		"    -st                               List local cache count and Azure count of all objects\n" +
-		"    -tmg                              Dump current token string for MS Graph API\n" +
-		"    -taz                              Dump current token string for Azure Resource API\n" +
-		"    -tc \"TokenString\"                 Dump token claims\n" +
+		"  Read-Write Functions\n" +
+		"  -rm[f] UUID|Specfile|\"role name\"  Delete role definition or assignment based on specifier; force option\n" +
+		"  -up[f] Specfile                   Create or update definition or assignment based on YAML specfile; force option\n" +
+		"  -kd[j]                            Create a skeleton role-definition.yaml specfile\n" +
+		"  -ka[j]                            Create a skeleton role-assignment.yaml specfile\n" +
+		"  -spas SP_UUID \"name\" [Expiry]     Add secret to SP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)\n" +
+		"  -sprs SP_UUID SecretID            Remove secret from Service Principal\n" +
+		"  -apas APP_UUID \"name\" [Expiry]    Add secret to APP; Expiry in YYYY-MM-DD format or X number of days (defaults to 366)\n" +
+		"  -aprs APP_UUID SecretID           Remove secret from application\n" +
+		"  -uuid                             Generate new UUID\n" +
 		"\n" +
-		"    -id                               Display configured login values\n" +
-		"    -id TenantId Username             Set up user for interactive login\n" +
-		"    -id TenantId ClientId Secret      Set up ID for automated login\n" +
-		"    -tx                               Delete current configured login values and token\n" +
-		"    -v                                Print this usage page\n")
+		"  Housekeeping Functions\n" +
+		"  -" + X + "x                               Delete " + X + " object local file cache\n" +
+		"  -xx                               Delete ALL cache local files\n" +
+		"  -id                               Display configured login values\n" +
+		"  -id TenantId Username             Set up user for interactive login\n" +
+		"  -id TenantId ClientId Secret      Set up ID for automated login\n" +
+		"  -tx                               Delete current configured login values and token\n" +
+		"  -?, -h, --help                    Print this usage page\n")
 	os.Exit(0)
 }
 
@@ -97,7 +99,7 @@ func main() {
 		arg1 := os.Args[1]
 		// This first set of 1-arg requests do not require API tokens to be set up
 		switch arg1 {
-		case "-v":
+		case "-?", "-h", "--help":
 			printUsage()
 		case "-id":
 			maz.DumpLoginValues(z)

@@ -3,7 +3,7 @@ module azm
 go 1.21.3
 
 require (
-	github.com/git719/maz v1.8.7
+	github.com/git719/maz v1.8.8
 	github.com/git719/utl v1.3.2
 	github.com/google/uuid v1.3.1
 )
