@@ -12,13 +12,14 @@ import (
 
 const (
 	prgname = "azm"
-	prgver  = "2.4.9"
+	prgver  = "2.5.0"
 )
 
 func printUsage() {
 	X := utl.Red("X")
 	fmt.Printf(prgname + " v" + prgver + "\n" +
-		"  Azure IAM utility. See <https://github.com/git719/azm>\n\n" +
+		"Azure IAM utility. See <https://github.com/git719/azm>\n" +
+		"Usage: " + prgname + " [options]\n" +
 		"  Read-Only Functions\n" +
 		"  UUID                              Show object(s) related to given UUID\n" +
 		"  -vs Specfile                      Compare YAML specfile to what's in Azure (only for d and a objects)\n" +
