@@ -7,13 +7,13 @@ Microsoft already has an official [Azure CLI tool](https://learn.microsoft.com/e
 - Only focuses on the smaller set of Azure objects that are related to IAM 
 - Do quick and dirty searches of any IAM related object types in the azure tenant
 - It is written in [Go](https://go.dev/) so it's much faster than `az`, or Python or PowerShell scripts
-- Compiles into a binary executable that can easily be used from Windows, Linux, or macOS operating systems
+- Top-notch Go OS portability support. You can immediately compile a binary executable for either Windows, Linux, or macOS
 - Automatic Linux [releases](https://github.com/git719/azm/releases/tag/v2.4.8) can easily be used in Github workflows
-- Supports leveraging OIDC Github Action workflows with no passwords for configured Service Principal
-- Primarily developed as a __proof-of-concept__ to learn to develop Azure utilities in the Go language
-- Developed as part of a framework library for acquiring Azure [JWT](https://jwt.io/) token using the [MSAL library for Go](https://github.com/AzureAD/microsoft-authentication-library-for-go) (this utility leverages that library, [located here](https://github.com/git719/maz/blob/main/README.md))
-- Quickly get a token to access the tenant's **Resources** Services API via endpoint <https://management.azure.com> ([REST API](https://learn.microsoft.com/en-us/rest/api/azure/))
-- Quickly get a token to access the tenant's **Security** Services API via endpoint <https://graph.microsoft.com> ([MS Graph](https://learn.microsoft.com/en-us/graph/overview))
+- Supports leveraging OIDC Github Action workflows with no passwords for a configured Azure Service Principal
+- Primarily developed as a __proof-of-concept__ to learn to develop Go Azure utilities
+- Developed as part of a framework library for acquiring Azure [JWT](https://jwt.io/) token using the [MSAL library for Go](https://github.com/AzureAD/microsoft-authentication-library-for-go) (leverages [maz](https://github.com/git719/maz/blob/main/README.md) library)
+- Quickly get a token to access an Azure tenant's **Resources** Services API via endpoint <https://management.azure.com> ([REST API](https://learn.microsoft.com/en-us/rest/api/azure/))
+- Quickly get a token to access an Azure tenant's **Security** Services API via endpoint <https://graph.microsoft.com> ([MS Graph](https://learn.microsoft.com/en-us/graph/overview))
 
 **PS:** Every repo should have a **Why?** entry at the top 😊
 
@@ -22,7 +22,7 @@ Microsoft already has an official [Azure CLI tool](https://learn.microsoft.com/e
 This is a little _Swiss Army knife_ that can very quickly perform the following functions:
 1. Read-Only Functions
     > **Note**<br>
-    Of course these Read-Only functions are *only* available if you setup the tool to logon with an account that has the respective Read-Only privileges
+    If logon account does not have the required *Read-Only* privileges, below functions will fail
     - List the following [Azure Resources Services](https://que.tips/azure/#azure-resource-services) objects in your tenant:
         - RBAC Role Definitions
         - RBAC Role Assignments
@@ -40,7 +40,7 @@ This is a little _Swiss Army knife_ that can very quickly perform the following 
     - Perform *many* other related listing functions
 2. Read-Write Functions
     > **Note**<br>
-    Again, these Read-Write functions are **only** available if you setup the tool to logon with an account that has the respective Read-Write privileges
+    Again, if logon account does not have the required *Read-Write* privileges, below functions will fail
     - Delete/Create/Update the following [Azure Resources Services](https://que.tips/azure/#azure-resource-services) objects in your tenant:
         - RBAC Role Definitions
         - RBAC Role Assignments
@@ -61,7 +61,7 @@ To compile `azm`, first make sure you have installed and set up the Go language 
 - To build from a *regular* Windows Command Prompt, just run the corresponding line in the `build` file (`go build ...`)
 - If there are no errors, you should now be able to type `azm` and see the usage screen for this utility.
 
-This utility has been successfully tested on macOS, Ubuntu Linux, and Windows. In Windows it works from a regular CMD.EXE, or PowerShell prompts, as well as from a GitBASH prompt.
+This utility has been successfully tested on macOS, Ubuntu Linux, and Windows. In Windows it works from a regular CMD.EXE, or PowerShell prompts, as well as from a GitBASH prompt. Remember that Go allows cross-compilation targets to be other OSes, so for examplce, from a Windows machine you can compile a Linux executable binary.
 
 Below other sections in this README explain how to set up access and use the utility in your own Azure tenant. 
 
