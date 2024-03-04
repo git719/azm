@@ -3,7 +3,7 @@ module azm
 go 1.22
 
 require (
-	github.com/git719/maz v1.8.9
+	github.com/git719/maz v1.9.0
 	github.com/git719/utl v1.3.2
 	github.com/google/uuid v1.3.1
 )

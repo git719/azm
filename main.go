@@ -12,7 +12,7 @@ import (
 
 const (
 	prgname = "azm"
-	prgver  = "2.5.0"
+	prgver  = "2.5.1"
 )
 
 func printUsage() {
