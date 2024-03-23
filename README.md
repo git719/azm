@@ -1,9 +1,12 @@
 ## azm
+
 `azm` is a [CLI](https://en.wikipedia.org/wiki/Command-line_interface) utility for managing [Indentity and Access Management (IAM)](https://www.nist.gov/identity-access-management) related Azure objects.
 
 
 ### Why?
+
 Microsoft already has an official [Azure CLI tool](https://learn.microsoft.com/en-us/cli/azure/) called `az`, so **why** this?
+
 - Only focuses on the smaller set of Azure objects that are related to IAM 
 - Do quick and dirty searches of any IAM related object types in the azure tenant
 - It is written in [Go](https://go.dev/) so it's much faster than `az`, or Python or PowerShell scripts
@@ -15,10 +18,10 @@ Microsoft already has an official [Azure CLI tool](https://learn.microsoft.com/e
 - Quickly get a token to access an Azure tenant's **Resources** Services API via endpoint <https://management.azure.com> ([REST API](https://learn.microsoft.com/en-us/rest/api/azure/))
 - Quickly get a token to access an Azure tenant's **Security** Services API via endpoint <https://graph.microsoft.com> ([MS Graph](https://learn.microsoft.com/en-us/graph/overview))
 
-**PS:** Every repo should have a **Why?** entry at the top 😊
 
 
 ### Capabilities
+
 This is a little _Swiss Army knife_ that can very quickly perform the following functions:
 1. Read-Only Functions
     > **Note**<br>
@@ -53,6 +56,7 @@ This is a little _Swiss Army knife_ that can very quickly perform the following 
 
 
 ### Getting Started
+
 To compile `azm`, first make sure you have installed and set up the Go language on your system. You can do that by following [these instructions here](https://que.tips/golang/#install-go-on-macos) or by following other similar recommendations found across the web.
 
 - Also ensure that `$GOPATH/bin/` is in your `$PATH`, since that's where the executable binary will be placed.
@@ -67,6 +71,7 @@ Below other sections in this README explain how to set up access and use the uti
 
 
 ### Access Requirements
+
 First and foremost you need to know the special **Tenant ID** for your tenant. This is the unique UUID that identifies your Microsoft Azure tenant.
 
 Then, you need a User ID or a Service Principal with the appropriate access rights. Either one will need the necessary privileges to perform the functions described above. For Read-Only functions that typically means getting _Reader_ role access to read **resource** objects, and _Global Reader_ role access to read **security** objects. The higher the scope of these access assignments, the more you will be able to see with the utility. 
@@ -77,6 +82,7 @@ Another way of connecting is to use access tokens that have been acquired in ano
 
 
 #### User Logon
+
 For example, if your Tenant ID was **c44154ad-6b37-4972-8067-0ef1068079b2**, and your User ID UPN was __bob@contoso.com__, you would type:
 
 ```
@@ -137,6 +143,7 @@ config_creds_file:
 ```
 
 #### SP Logon
+
 To use an SP logon it means you first have to set up a dedicated App Registrations, grant it the same Reader resource and Global Reader security access roles mentioned above. For how to do an Azure App Registration please reference some other sources on the Web. By the way, this method is NOT RECOMMENDED, as you would be exposing the secret as an environment variables, which is not very good security practice.
 
 Once above is setup, you then follow the same logic as for User ID logon above, but specifying 3 instead of 2 values; or use the other environment variables (MAZ_CLIENT_ID and MAZ_CLIENT_SECRET). 
@@ -151,6 +158,7 @@ These login methods and the environment variables are described in more length i
 
 
 ### Quick Examples
+
 1. List any Azure RBAC role, like the Built-in "Billing Reader" role for example:
 
 ```
@@ -201,8 +209,9 @@ As the **usage** section shows, the secret Expiry defaults to 366 days if none i
 
 
 ### Usage
+
 ```
-azm Azure IAM utility v2.4.8
+azm Azure IAM CLI utility v2.6.1
     Read-Only Functions
     UUID                              Show object for given UUID
     -vs Specfile                      Compare YAML specfile to what's in Azure (only for d and a objects)
@@ -244,12 +253,13 @@ Instead of documenting individual examples of all of the above switches, it is b
 
 
 
-
 ### pman
+
 [pman](https://github.com/git719/azm/tree/main/pman) is a poor man's REST API Postman BASH script, which leverages `azm`'s `-tmg` and `-taz` arguments to get the current user's token to make other generic REST API calls against those 2 Microsoft APIs.
 
 
 ### Token Sample Code
+
 Included in this repo are examples of how to get a Microsoft token with 3 different languages. The token can be for any API. The examples use Docker Compose.
 1. [Python Example](https://github.com/git719/azm/tree/main/token-python)
 2. [PowerShell Example](https://github.com/git719/azm/tree/main/token-powershell)
@@ -257,10 +267,12 @@ Included in this repo are examples of how to get a Microsoft token with 3 differ
 
 
 ### Container
+
 There is also a Docker Compose file and a Dockerfile for an example of how to use this program within a container.
 
 
 ### To-Do and Known Issues
+
 The program is stable enough to be relied on as a small utility, but there are a number of little niggly things that could be improved. Will put a list together at some point.
 
 At any rate, no matter how stable any code is, it is always worth remembering computer scientist [Tony Hoare](https://en.wikipedia.org/wiki/Tony_Hoare)'s famous quote:
