@@ -12,14 +12,14 @@ import (
 
 const (
 	prgname = "azm"
-	prgver  = "2.6.0"
+	prgver  = "2.6.1"
 )
 
 // Prints program usage
 func printUsage() {
 	X := utl.Red("X")
 	fmt.Printf(prgname + " v" + prgver + "\n" +
-		"Azure IAM utility. See <https://github.com/git719/azm>\n" +
+		"Azure IAM CLI utility - https://github.com/git719/azm\n" +
 		"Usage: " + prgname + " [options]\n" +
 		"  Read-Only Functions\n" +
 		"  UUID                              Show object(s) related to given UUID\n" +
