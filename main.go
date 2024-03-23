@@ -5,16 +5,17 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/git719/maz"
-	"github.com/git719/utl"
 	"github.com/google/uuid"
+	"github.com/queone/maz"
+	"github.com/queone/utl"
 )
 
 const (
 	prgname = "azm"
-	prgver  = "2.5.3"
+	prgver  = "2.6.0"
 )
 
+// Prints program usage
 func printUsage() {
 	X := utl.Red("X")
 	fmt.Printf(prgname + " v" + prgver + "\n" +
@@ -59,8 +60,8 @@ func printUsage() {
 	os.Exit(0)
 }
 
+// Sets up variable bundle object struct
 func setupVariables(z *maz.Bundle) maz.Bundle {
-	// Set up variable object struct
 	*z = maz.Bundle{
 		ConfDir:      "",
 		CredsFile:    "credentials.yaml",

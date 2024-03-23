@@ -1,18 +1,18 @@
 module azm
 
-go 1.22
+go 1.22.0
 
 require (
-	github.com/git719/maz v1.9.2
-	github.com/git719/utl v1.3.2
-	github.com/google/uuid v1.3.1
+	github.com/google/uuid v1.6.0
+	github.com/queone/maz v1.0.0
+	github.com/queone/utl v1.0.0
 )
 
 require (
-	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.0 // indirect
+	github.com/AzureAD/microsoft-authentication-library-for-go v1.2.2 // indirect
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/goccy/go-yaml v1.11.0 // indirect
-	github.com/golang-jwt/jwt/v5 v5.0.0 // indirect
+	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/gookit/color v1.5.2 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect

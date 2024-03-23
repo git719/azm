@@ -14,6 +14,7 @@ esac
 go mod tidy
 go fmt
 go test ./...
+staticcheck ./...
 go build -ldflags "-s -w" -o $BIN
 
 # For cross compiling

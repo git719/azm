@@ -11,7 +11,7 @@ Microsoft already has an official [Azure CLI tool](https://learn.microsoft.com/e
 - Automatic Linux [releases](https://github.com/git719/azm/releases/tag/v2.4.8) can easily be used in Github workflows
 - Supports leveraging OIDC Github Action workflows with no passwords for a configured Azure Service Principal
 - Primarily developed as a __proof-of-concept__ to learn to develop Go Azure utilities
-- Developed as part of a framework library for acquiring Azure [JWT](https://jwt.io/) token using the [MSAL library for Go](https://github.com/AzureAD/microsoft-authentication-library-for-go) (leverages [maz](https://github.com/git719/maz/blob/main/README.md) library)
+- Developed as part of a framework library for acquiring Azure [JWT](https://jwt.io/) token using the [MSAL library for Go](https://github.com/AzureAD/microsoft-authentication-library-for-go) (leverages [maz](https://github.com/queone/maz/blob/main/README.md) library)
 - Quickly get a token to access an Azure tenant's **Resources** Services API via endpoint <https://management.azure.com> ([REST API](https://learn.microsoft.com/en-us/rest/api/azure/))
 - Quickly get a token to access an Azure tenant's **Security** Services API via endpoint <https://graph.microsoft.com> ([MS Graph](https://learn.microsoft.com/en-us/graph/overview))
 
@@ -147,7 +147,7 @@ An even better security practive when using the SP logon method is to leverage a
 
 (TODO: Need OIDC setup example, and how configure the SP on the Azure side with federated login.)
 
-These login methods and the environment variables are described in more length in the [maz](https://github.com/git719/maz) package README.
+These login methods and the environment variables are described in more length in the [maz](https://github.com/queone/maz) package README.
 
 
 ### Quick Examples
@@ -270,6 +270,6 @@ At any rate, no matter how stable any code is, it is always worth remembering co
 ### Coding Philosophy and Feedback
 The primary goal of this utility is to serve as a study aid for coding Azure utilities in Go, as well as to serve as a quick _Swiss Army knife* utility for managin tenant IAM objects. If you look through the code I think you will find that is relatively straightforward. There is a deliberate effor to keep the code as clear as possible, and simple to understand and maintain.
 
-Note that the bulk of the code is actually in the [maz](https://github.com/git719/maz) library, and other packages. Please visit that repo for more info.
+Note that the bulk of the code is actually in the [maz](https://github.com/queone/maz) library, and other packages. Please visit that repo for more info.
 
 This utility along with the required libraries are obviously very useful to me. I don't think I'm going to formalize the way to contribute to this project, but if you find it useful and have some improvement suggestion please let me know. Anyway, this is published as an open source project, so feel free to clone and use on your own, with proper attributions.
